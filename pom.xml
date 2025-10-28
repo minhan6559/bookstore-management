@@ -119,6 +119,19 @@
             <version>3.41.2.2</version>
         </dependency>
 
+        <!-- Spring Security Crypto for BCrypt hashing -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
+            <version>6.3.3</version>
+        </dependency>
+        <!-- Spring Core provides logging bridge (spring-jcl) required at runtime by Spring Crypto -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>6.1.14</version>
+        </dependency>
+
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>

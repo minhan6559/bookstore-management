@@ -11,7 +11,7 @@
     <VBox spacing="30" style="-fx-padding: 40; -fx-background-color: #f4e1c1; -fx-alignment: CENTER;" HBox.hgrow="ALWAYS">
 
         <!-- Welcome Label -->
-        <Label fx:id="welcomeLabel" text="Welcome to The Reading Room!" style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #8b4513;" />
+        <Label fx:id="welcomeLabel" text="Welcome to Book Buddy!" style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #8b4513;" />
 
         <!-- Spacer to add some space -->
         <Region prefHeight="35" />

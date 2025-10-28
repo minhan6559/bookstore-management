@@ -2,13 +2,15 @@ package com.thereadingroom.service.user;
 
 import com.thereadingroom.model.dao.user.UserDAO;
 import com.thereadingroom.model.entity.User;
+import com.thereadingroom.utils.auth.PasswordUtils;
 
 import java.util.List;
 import java.util.Optional;
 
 /**
  * UserService handles business logic related to user management.
- * It acts as an intermediary between controllers and the data access layer (DAO).
+ * It acts as an intermediary between controllers and the data access layer
+ * (DAO).
  */
 public class UserService implements IUserService {
 
@@ -55,7 +57,32 @@ public class UserService implements IUserService {
      */
     @Override
     public boolean validateUserLogin(String username, String password) {
-        return userDAO.validateLogin(username, password);
+        User user = userDAO.getUserByUsername(username);
+        if (user == null)
+            return false;
+
+        String storedPassword = user.getPassword();
+        if (storedPassword == null)
+            return false;
+
+        // If already hashed, verify with bcrypt
+        if (PasswordUtils.isBcryptHash(storedPassword)) {
+            return PasswordUtils.verifyPassword(password, storedPassword);
+        }
+
+        // Fallback for legacy plaintext: compare, then migrate to hashed
+        boolean matches = storedPassword.equals(password);
+        if (matches) {
+            String hashed = PasswordUtils.hashPassword(password);
+            userDAO.updateUserProfileById(
+                    user.getId(),
+                    user.getUsername(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    hashed,
+                    user.isAdmin());
+        }
+        return matches;
     }
 
     /**
@@ -73,7 +100,8 @@ public class UserService implements IUserService {
      * Retrieve a user by their username.
      *
      * @param username The username to look up.
-     * @return An Optional containing the User object if found, or empty if not found.
+     * @return An Optional containing the User object if found, or empty if not
+     *         found.
      */
     @Override
     public Optional<User> getUserByUsername(String username) {
@@ -91,8 +119,17 @@ public class UserService implements IUserService {
      * @return true if the update was successful; false otherwise.
      */
     @Override
-    public boolean updateUserProfile(String username, String firstName, String lastName, String password, boolean isAdmin) {
-        return userDAO.updateUserProfile(username, firstName, lastName, password, isAdmin);
+    public boolean updateUserProfile(String username, String firstName, String lastName, String password,
+            boolean isAdmin) {
+        String toStore = password;
+        if (password == null || password.trim().isEmpty()) {
+            // Preserve existing password
+            User existing = userDAO.getUserByUsername(username);
+            toStore = existing != null ? existing.getPassword() : null;
+        } else if (!PasswordUtils.isBcryptHash(password)) {
+            toStore = PasswordUtils.hashPassword(password);
+        }
+        return userDAO.updateUserProfile(username, firstName, lastName, toStore, isAdmin);
     }
 
     /**
@@ -107,8 +144,17 @@ public class UserService implements IUserService {
      * @return true if the update was successful; false otherwise.
      */
     @Override
-    public boolean updateUserProfilebyID(int userId, String username, String firstName, String lastName, String password, boolean isAdmin) {
-        return userDAO.updateUserProfileById(userId, username, firstName, lastName, password, isAdmin);
+    public boolean updateUserProfilebyID(int userId, String username, String firstName, String lastName,
+            String password, boolean isAdmin) {
+        String toStore = password;
+        if (password == null || password.trim().isEmpty()) {
+            // Preserve existing password
+            Optional<User> existingOpt = Optional.ofNullable(userDAO.getUserByUsername(username));
+            toStore = existingOpt.map(User::getPassword).orElse(null);
+        } else if (!PasswordUtils.isBcryptHash(password)) {
+            toStore = PasswordUtils.hashPassword(password);
+        }
+        return userDAO.updateUserProfileById(userId, username, firstName, lastName, toStore, isAdmin);
     }
 
     /**
@@ -123,7 +169,8 @@ public class UserService implements IUserService {
      */
     @Override
     public boolean registerUser(String username, String firstName, String lastName, String password, boolean isAdmin) {
-        return userDAO.registerUser(username, firstName, lastName, password, isAdmin);
+        String hashed = PasswordUtils.hashPassword(password);
+        return userDAO.registerUser(username, firstName, lastName, hashed, isAdmin);
     }
 
     /**

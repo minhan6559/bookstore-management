@@ -72,6 +72,20 @@
                     -fx-background-color: #ffffff;" />
             </VBox>
 
+            <!-- Confirm Password field -->
+            <VBox spacing="5" style="-fx-alignment: CENTER;">
+                <Label text="Confirm Password:" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #8b4513; -fx-alignment: CENTER-LEFT;" />
+                <PasswordField fx:id="confirmPasswordField" style="
+                    -fx-pref-width: 300px;
+                    -fx-max-width: 300px;
+                    -fx-padding: 10 15;
+                    -fx-background-radius: 20;
+                    -fx-border-radius: 20;
+                    -fx-border-color: #d2691e;
+                    -fx-border-width: 2px;
+                    -fx-background-color: #ffffff;" />
+            </VBox>
+
             <!-- Save changes button -->
             <Button onAction="#handleSaveChanges"
                     style="

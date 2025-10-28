@@ -1,6 +1,7 @@
 package com.thereadingroom.model.dao.database;
 
 import com.thereadingroom.model.dao.BaseDAO;
+import com.thereadingroom.utils.auth.PasswordUtils;
 
 import java.util.Arrays;
 
@@ -148,10 +149,14 @@ public class DatabaseInitializer extends BaseDAO {
      */
     private static void initializeAdminUser() {
         String checkAdminSQL = "SELECT COUNT(*) FROM users WHERE username = 'admin'";
-        String insertAdminSQL = """
-                    INSERT INTO users (username, password, first_name, last_name, is_admin)
-                    VALUES ('admin', 'reading_admin', 'Admin', 'Admin', 1)
-                """;
+        // Generate bcrypt-hashed default passwords at runtime
+        String adminHash = PasswordUtils.hashPassword("admin123");
+        String userHash = PasswordUtils.hashPassword("password123");
+        String[][] adminData = {
+                { "admin", adminHash, "Admin", "Admin", "1" },
+                { "minhan6559", userHash, "Minh An", "Nguyen", "1" }
+        };
+        String insertAdminSQL = "INSERT INTO users (username, password, first_name, last_name, is_admin) VALUES (?, ?, ?, ?, ?)";
 
         DatabaseInitializer initializer = new DatabaseInitializer();
         Boolean adminExists = initializer.executeQuery(checkAdminSQL, rs -> {
@@ -163,7 +168,7 @@ public class DatabaseInitializer extends BaseDAO {
         });
 
         if (!adminExists) {
-            initializer.executeUpdate(insertAdminSQL);
+            initializer.executeBatchUpdate(insertAdminSQL, Arrays.asList((Object[][]) adminData));
             System.out.println("Admin user created successfully.");
         } else {
             System.out.println("Admin user already exists.");

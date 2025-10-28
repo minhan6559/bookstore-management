@@ -10,26 +10,30 @@ import javafx.stage.Stage;
 
 /**
  * Controller responsible for handling user registration.
- * Validates user inputs and interacts with the IUserService to register new users.
+ * Validates user inputs and interacts with the IUserService to register new
+ * users.
  */
 public class RegisterController {
 
     @FXML
-    private TextField usernameField;  // TextField for entering the username
+    private TextField usernameField; // TextField for entering the username
 
     @FXML
-    private TextField firstNameField;  // TextField for entering the first name
+    private TextField firstNameField; // TextField for entering the first name
 
     @FXML
-    private TextField lastNameField;  // TextField for entering the last name
+    private TextField lastNameField; // TextField for entering the last name
 
     @FXML
-    private PasswordField passwordField;  // PasswordField for entering the password
+    private PasswordField passwordField; // PasswordField for entering the password
+
+    @FXML
+    private PasswordField confirmPasswordField; // PasswordField for confirming the password
 
     @FXML
     private ImageView imageView; // ImageView for displaying the library image
 
-    private IUserService userService;  // Service responsible for user-related operations
+    private IUserService userService; // Service responsible for user-related operations
 
     /**
      * Setter method for injecting the user service dependency.
@@ -52,20 +56,23 @@ public class RegisterController {
      */
     @FXML
     public void handleRegister() {
-        if (!isUserServiceInitialized()) return;  // Ensure userService is initialized
+        if (!isUserServiceInitialized())
+            return; // Ensure userService is initialized
 
         String username = usernameField.getText().trim();
         String firstName = firstNameField.getText().trim();
         String lastName = lastNameField.getText().trim();
         String password = passwordField.getText().trim();
+        String confirmPassword = confirmPasswordField.getText().trim();
 
-        if (!areFieldsValid(username, firstName, lastName, password)) return;  // Validate input fields
+        if (!areFieldsValid(username, firstName, lastName, password, confirmPassword))
+            return; // Validate input fields
 
         // Attempt to register the user and show appropriate feedback
         boolean success = userService.registerUser(username, firstName, lastName, password, false);
         if (success) {
             UIUtils.showAlert("Success", "Registration successful! Redirecting to login...");
-            redirectToLogin();  // Redirect to login if successful
+            redirectToLogin(); // Redirect to login if successful
         } else {
             UIUtils.showError("Registration Failed", "Username already exists. Please choose another.");
         }
@@ -76,7 +83,7 @@ public class RegisterController {
      */
     @FXML
     public void handleBackToLogin() {
-        redirectToLogin();  // Redirect to the login screen
+        redirectToLogin(); // Redirect to the login screen
     }
 
     /**
@@ -86,7 +93,7 @@ public class RegisterController {
      */
     private boolean isUserServiceInitialized() {
         if (userService == null) {
-            throw new IllegalStateException("UserService not initialized!");  // Throw exception if uninitialized
+            throw new IllegalStateException("UserService not initialized!"); // Throw exception if uninitialized
         }
         return true;
     }
@@ -100,14 +107,17 @@ public class RegisterController {
      * @param password  The password entered by the user.
      * @return true if all fields are valid, false otherwise.
      */
-    private boolean areFieldsValid(String username, String firstName, String lastName, String password) {
+    private boolean areFieldsValid(String username, String firstName, String lastName, String password,
+            String confirmPassword) {
         String errorMessage = null;
 
         // Check if any field is empty or if the password is too short
-        if (isAnyFieldEmpty(username, firstName, lastName, password)) {
+        if (isAnyFieldEmpty(username, firstName, lastName, password, confirmPassword)) {
             errorMessage = "All fields must be filled out.";
         } else if (password.length() < 8) {
             errorMessage = "Password must be at least 8 characters long.";
+        } else if (!password.equals(confirmPassword)) {
+            errorMessage = "Passwords do not match.";
         }
 
         // Show error message if validation fails
@@ -126,7 +136,8 @@ public class RegisterController {
      */
     private boolean isAnyFieldEmpty(String... fields) {
         for (String field : fields) {
-            if (field.isEmpty()) return true;  // Return true if any field is empty
+            if (field.isEmpty())
+                return true; // Return true if any field is empty
         }
         return false;
     }
@@ -137,7 +148,7 @@ public class RegisterController {
     private void redirectToLogin() {
         UIUtils.loadSceneWithData("/com/thereadingroom/fxml/common/login.fxml", getStage(), "Login", controller -> {
             LoginController loginController = (LoginController) controller;
-            loginController.setUserService(userService);  // Inject the user service into the LoginController
+            loginController.setUserService(userService); // Inject the user service into the LoginController
         });
     }
 
@@ -147,6 +158,6 @@ public class RegisterController {
      * @return The current stage (window).
      */
     private Stage getStage() {
-        return (Stage) usernameField.getScene().getWindow();  // Get the current stage
+        return (Stage) usernameField.getScene().getWindow(); // Get the current stage
     }
 }

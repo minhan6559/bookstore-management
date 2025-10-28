@@ -6,6 +6,25 @@ import javafx.beans.property.*;
  * Represents an item in the shopping cart as displayed in a table.
  * Stores information such as the book details, quantity, total amount, and
  * selection status.
+ * 
+ * This is a UI-specific model class designed specifically for JavaFX table
+ * views.
+ * It provides enhanced functionality compared to CartItem for display purposes:
+ * 
+ * Key Features:
+ * - Contains full Book object for rich display information
+ * - Uses JavaFX properties for automatic UI binding and updates
+ * - Automatically calculates total amount (price × quantity)
+ * - Includes selection state for checkout functionality
+ * - Provides property methods for seamless UI integration
+ * 
+ * This class is part of a three-tier cart architecture:
+ * 1. ShoppingCart - Business logic container
+ * 2. CartItem - Simple DTO for data transfer
+ * 3. CartTableItem - UI display model for table views (this class)
+ * 
+ * Usage: Convert CartItem or ShoppingCart data to CartTableItem for display
+ * in JavaFX TableView components in the shopping cart interface.
  */
 public class CartTableItem {
 

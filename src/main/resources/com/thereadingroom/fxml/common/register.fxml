@@ -22,7 +22,7 @@
         <VBox alignment="CENTER" spacing="15" style="-fx-padding: 50; -fx-background-color: rgba(244, 225, 193, 0.9); -fx-pref-width: 420px;">
 
             <!-- Title with Downspace and Word Wrapping -->
-            <Label text="The Reading Room - Register"
+            <Label text="Book Buddy - Register"
                    style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #a0522d; -fx-wrap-text: true; -fx-text-alignment: center;"/>
 
             <!-- Tightened Spacing for Registration Fields -->
@@ -76,6 +76,20 @@
                 <VBox alignment="CENTER_LEFT" spacing="4">
                     <Label text="Password" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #666;"/>
                     <PasswordField fx:id="passwordField" promptText="Enter your password" style="
+                    -fx-pref-width: 300px;
+                    -fx-max-width: 300px;
+                    -fx-padding: 10 15;
+                    -fx-background-radius: 20;
+                    -fx-border-radius: 20;
+                    -fx-border-color: #d2691e;
+                    -fx-border-width: 2px;
+                    -fx-background-color: #ffffff;"/>
+                </VBox>
+
+                <!-- Confirm Password -->
+                <VBox alignment="CENTER_LEFT" spacing="4">
+                    <Label text="Confirm Password" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #666;"/>
+                    <PasswordField fx:id="confirmPasswordField" promptText="Re-enter your password" style="
                     -fx-pref-width: 300px;
                     -fx-max-width: 300px;
                     -fx-padding: 10 15;
