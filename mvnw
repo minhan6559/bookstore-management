@@ -1,4 +1,8 @@
 #!/bin/sh
+
+# Use project-local JDK
+JAVA_HOME="$(cd "$(dirname "$0")" && pwd)/jdk-22"
+export JAVA_HOME
 # ----------------------------------------------------------------------------
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file

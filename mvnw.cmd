@@ -40,6 +40,9 @@ title %0
 @REM enable echoing by setting MAVEN_BATCH_ECHO to 'on'
 @if "%MAVEN_BATCH_ECHO%" == "on"  echo %MAVEN_BATCH_ECHO%
 
+@REM Use project-local JDK
+set JAVA_HOME=%~dp0jdk-22
+
 @REM set %HOME% to equivalent of $HOME
 if "%HOME%" == "" (set "HOME=%HOMEDRIVE%%HOMEPATH%")
 
