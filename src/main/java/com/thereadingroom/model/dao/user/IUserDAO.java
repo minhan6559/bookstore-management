@@ -24,7 +24,8 @@ public interface IUserDAO {
      * @param firstName The first name of the user.
      * @param lastName  The last name of the user.
      * @param password  The password for the user.
-     * @param isAdmin   Whether the user is an admin (true for admin, false for regular user).
+     * @param isAdmin   Whether the user is an admin (true for admin, false for
+     *                  regular user).
      * @return true if the user is registered successfully, false otherwise.
      */
     boolean registerUser(String username, String firstName, String lastName, String password, boolean isAdmin);
@@ -35,7 +36,17 @@ public interface IUserDAO {
      * @param username The username of the user.
      * @param password The password of the user.
      * @return true if the credentials are valid, false otherwise.
+     * @deprecated This method performs plaintext password comparison, which is
+     *             insecure.
+     *             Passwords are stored as bcrypt hashes in the database, so this
+     *             method will
+     *             always return false. Use {@link #getUserByUsername(String)}
+     *             instead and
+     *             verify the password using bcrypt in the service layer.
+     * @see com.thereadingroom.service.user.UserService#validateUserLogin(String,
+     *      String)
      */
+    @Deprecated
     boolean validateLogin(String username, String password);
 
     /**
@@ -93,5 +104,6 @@ public interface IUserDAO {
      * @param isAdmin   Whether the user is an admin.
      * @return true if the profile is updated successfully, false otherwise.
      */
-    boolean updateUserProfileById(int userId, String username, String firstName, String lastName, String password, boolean isAdmin);
+    boolean updateUserProfileById(int userId, String username, String firstName, String lastName, String password,
+            boolean isAdmin);
 }

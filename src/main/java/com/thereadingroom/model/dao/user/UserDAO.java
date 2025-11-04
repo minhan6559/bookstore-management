@@ -24,7 +24,7 @@ public class UserDAO extends BaseDAO implements IUserDAO {
         String query = "SELECT id, username, first_name, last_name, is_admin FROM users";
         return executeQuery(query, rs -> {
             try {
-                return mapToUserList(rs);  // Maps result set to a list of users
+                return mapToUserList(rs); // Maps result set to a list of users
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -53,13 +53,28 @@ public class UserDAO extends BaseDAO implements IUserDAO {
      * @param username The username of the user.
      * @param password The password of the user.
      * @return true if the credentials are valid, false otherwise.
+     * @deprecated This method performs plaintext password comparison, which is
+     *             insecure.
+     *             Passwords are stored as bcrypt hashes in the database, so this
+     *             method will
+     *             always return false. Use {@link #getUserByUsername(String)}
+     *             instead and
+     *             verify the password using bcrypt in the service layer.
+     * @see com.thereadingroom.service.user.UserService#validateUserLogin(String,
+     *      String)
      */
+    @Deprecated
     @Override
     public boolean validateLogin(String username, String password) {
+        // WARNING: This method compares plaintext passwords, but passwords in the
+        // database
+        // are stored as bcrypt hashes. This method will always return false.
+        // Use getUserByUsername() and verify password with bcrypt in the service layer
+        // instead.
         String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
         return executeQuery(sql, rs -> {
             try {
-                return rs.next();  // Check if the user exists in the result set
+                return rs.next(); // Check if the user exists in the result set
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -77,7 +92,7 @@ public class UserDAO extends BaseDAO implements IUserDAO {
         String sql = "SELECT id, username, first_name, last_name, password, is_admin FROM users WHERE username = ?";
         return executeQuery(sql, rs -> {
             try {
-                return mapToUser(rs);  // Maps result set to a User object
+                return mapToUser(rs); // Maps result set to a User object
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -95,7 +110,8 @@ public class UserDAO extends BaseDAO implements IUserDAO {
      * @return true if the update is successful, false otherwise.
      */
     @Override
-    public boolean updateUserProfile(String username, String firstName, String lastName, String password, boolean isAdmin) {
+    public boolean updateUserProfile(String username, String firstName, String lastName, String password,
+            boolean isAdmin) {
         String sql = "UPDATE users SET first_name = ?, last_name = ?, password = ?, is_admin = ? WHERE username = ?";
         return executeUpdate(sql, firstName, lastName, password, isAdmin, username);
     }
@@ -111,7 +127,7 @@ public class UserDAO extends BaseDAO implements IUserDAO {
         String sql = "SELECT is_admin FROM users WHERE username = ?";
         return executeQuery(sql, rs -> {
             try {
-                return rs.next() && rs.getBoolean("is_admin");  // Return whether the user is admin
+                return rs.next() && rs.getBoolean("is_admin"); // Return whether the user is admin
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -129,7 +145,7 @@ public class UserDAO extends BaseDAO implements IUserDAO {
         String sql = "SELECT id FROM users WHERE username = ?";
         return executeQuery(sql, rs -> {
             try {
-                return rs.next() ? rs.getInt("id") : -1;  // Return the user ID, or -1 if not found
+                return rs.next() ? rs.getInt("id") : -1; // Return the user ID, or -1 if not found
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -160,7 +176,8 @@ public class UserDAO extends BaseDAO implements IUserDAO {
      * @return true if the update is successful, false otherwise.
      */
     @Override
-    public boolean updateUserProfileById(int userId, String username, String firstName, String lastName, String password, boolean isAdmin) {
+    public boolean updateUserProfileById(int userId, String username, String firstName, String lastName,
+            String password, boolean isAdmin) {
         String sql = "UPDATE users SET username = ?, first_name = ?, last_name = ?, password = ?, is_admin = ? WHERE id = ?";
         return executeUpdate(sql, username, firstName, lastName, password, isAdmin, userId);
     }
@@ -180,10 +197,9 @@ public class UserDAO extends BaseDAO implements IUserDAO {
                     rs.getString("first_name"),
                     rs.getString("last_name"),
                     rs.getString("password"),
-                    rs.getBoolean("is_admin")
-            );
+                    rs.getBoolean("is_admin"));
         }
-        return null;  // Return null if no user is found
+        return null; // Return null if no user is found
     }
 
     /**
@@ -201,9 +217,8 @@ public class UserDAO extends BaseDAO implements IUserDAO {
                     rs.getString("username"),
                     rs.getString("first_name"),
                     rs.getString("last_name"),
-                    "",  // Omit the password for security
-                    rs.getBoolean("is_admin")
-            ));
+                    "", // Omit the password for security
+                    rs.getBoolean("is_admin")));
         }
         return users;
     }

@@ -149,12 +149,10 @@ public class DatabaseInitializer extends BaseDAO {
      */
     private static void initializeAdminUser() {
         String checkAdminSQL = "SELECT COUNT(*) FROM users WHERE username = 'admin'";
-        // Generate bcrypt-hashed default passwords at runtime
-        String adminHash = PasswordUtils.hashPassword("admin123");
-        String userHash = PasswordUtils.hashPassword("password123");
+
+        // Use pre-hashed password for admin user
         String[][] adminData = {
-                { "admin", adminHash, "Admin", "Admin", "1" },
-                { "minhan6559", userHash, "Minh An", "Nguyen", "1" }
+                { "admin", "$2a$12$19maystnYax8yuWvlmeBGezL3nd0P3DA/cPe7y2Vy.lCZadJjXDQm", "Admin", "Admin", "1" },
         };
         String insertAdminSQL = "INSERT INTO users (username, password, first_name, last_name, is_admin) VALUES (?, ?, ?, ?, ?)";
 
