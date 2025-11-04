@@ -186,15 +186,15 @@ public class DatabaseInitializer extends BaseDAO {
                 """;
 
         String[][] books = {
-                { "Absolute Java", "Savitch", "10", "50", "142" },
-                { "JAVA: How to Program", "Deitel and Deitel", "100", "70", "475" },
-                { "Computing Concepts with JAVA 8 Essentials", "Horstman", "500", "89", "60" },
-                { "Java Software Solutions", "Lewis and Loftus", "500", "99", "12" },
-                { "Java Program Design", "Cohoon and Davidson", "2", "29", "86" },
-                { "Clean Code", "Robert Martin", "100", "45", "300" },
-                { "Gray Hat C#", "Brandon Perry", "300", "68", "178" },
-                { "Python Basics", "David Amos", "1000", "49", "79" },
-                { "Bayesian Statistics The Fun Way", "Will Kurt", "600", "42", "155" }
+                { "To Kill a Mockingbird", "Harper Lee", "120", "25", "580" },
+                { "1984", "George Orwell", "150", "22", "720" },
+                { "The Great Gatsby", "F. Scott Fitzgerald", "100", "20", "650" },
+                { "Pride and Prejudice", "Jane Austen", "200", "18", "540" },
+                { "The Catcher in the Rye", "J. D. Salinger", "180", "24", "430" },
+                { "The Hobbit", "J. R. R. Tolkien", "250", "30", "900" },
+                { "Sapiens: A Brief History of Humankind", "Yuval Noah Harari", "300", "35", "670" },
+                { "Atomic Habits", "James Clear", "500", "28", "1100" },
+                { "The Alchemist", "Paulo Coelho", "400", "23", "850" }
         };
 
         DatabaseInitializer initializer = new DatabaseInitializer();
