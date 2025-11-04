@@ -85,7 +85,7 @@ public class BookDAO extends BaseDAO implements IBookDAO {
      */
     @Override
     public boolean updateSoldCopies(int bookId, int quantity) {
-        String query = "UPDATE books SET sold_copies = ? WHERE id = ?";
+        String query = "UPDATE books SET sold_copies = sold_copies + ? WHERE id = ?";
         return executeUpdate(query, quantity, bookId);
     }
 

@@ -329,13 +329,13 @@ public class ShoppingCartController {
     private void adjustQuantity(CartTableItem cartItem, int adjustment) {
         int newQuantity = cartItem.getQuantity() + adjustment;
         if (newQuantity > 0) {
-            cartItem.setQuantity(newQuantity); // Update the item's quantity
-            shoppingCart.updateBookQuantity(cartItem.getBook(), newQuantity); // Update the in-memory cart
-            cartService.updateBookQuantity(shoppingCart.getCartId(), cartItem.getBook().getBookId(), newQuantity); // Update
-                                                                                                                   // the
-                                                                                                                   // database
-            // cartTableView.refresh(); // Refresh the TableView
-            updateTotalPrice(); // Recalculate the total price
+            cartItem.setQuantity(newQuantity);
+            shoppingCart.updateBookQuantity(cartItem.getBook(), newQuantity);
+            cartService.updateBookQuantity(shoppingCart.getCartId(), cartItem.getBook().getBookId(), newQuantity);
+            updateTotalPrice();
+        } else {
+            // Quantity reached zero or below: remove the item from cart and DB
+            removeItem(cartItem);
         }
     }
 }

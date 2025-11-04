@@ -140,7 +140,8 @@ public class CartDAO extends BaseDAO implements ICartDAO {
      */
     @Override
     public void addOrUpdateBookInCart(int cartId, int bookId, int quantity) {
-        String sql = "INSERT OR REPLACE INTO cart_items (cart_id, book_id, quantity) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO cart_items (cart_id, book_id, quantity) VALUES (?, ?, ?) "
+                + "ON CONFLICT(cart_id, book_id) DO UPDATE SET quantity = quantity + excluded.quantity";
         executeUpdate(sql, cartId, bookId, quantity);
     }
 

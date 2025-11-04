@@ -14,7 +14,7 @@ import java.sql.SQLException;
 public class Database {
 
     // The URL for the SQLite database
-    private static final String DB_URL = "jdbc:sqlite:readingroom.db";
+    private static final String DB_URL = "jdbc:sqlite:beyourshelf.db";
 
     // HikariCP DataSource for managing connections
     private static HikariDataSource dataSource;

@@ -93,7 +93,6 @@ public class PaymentController {
         try {
             String orderReference = processPaymentDetails(); // Process payment and retrieve order reference
             saveOrder(orderReference); // Save the order in the database
-            clearCartAfterPayment(); // Clear the shopping cart after payment
             UIUtils.showAlert("Payment Successful", "Your payment was successful! Order Reference: " + orderReference); // Notify
                                                                                                                         // user
                                                                                                                         // of
@@ -181,26 +180,6 @@ public class PaymentController {
             }
         }
         return orderItems;
-    }
-
-    /**
-     * Clears the user's shopping cart after successful payment.
-     *
-     * @throws SQLException if clearing the cart fails.
-     */
-    private void clearCartAfterPayment() throws SQLException {
-        // Remove only the selected items from the cart
-        List<Book> selectedBooks = shoppingCart.getBooks().keySet().stream()
-                .filter(shoppingCartController::isBookSelected) // Only selected books
-                .collect(Collectors.toList());
-
-        // Remove selected books from the database and clear them from the in-memory
-        // cart
-        cartService.removeBooksFromCart(shoppingCart.getCartId(), selectedBooks);
-        shoppingCart.removeBooks(selectedBooks); // Ensure that the in-memory shoppingCart is also updated
-
-        // Also update the UI
-        shoppingCartController.removeCheckedOutItemsFromCart();
     }
 
     /**
