@@ -13,8 +13,6 @@ import com.beyourshelf.model.dao.database.Database;
 import com.beyourshelf.model.entity.Order;
 import com.beyourshelf.model.entity.OrderItem;
 
-import static java.sql.DriverManager.getConnection;
-
 /**
  * Implementation of the IOrderDAO interface for interacting with the orders
  * table in the database.

@@ -3,7 +3,6 @@ package com.beyourshelf.model.dao.database;
 import java.util.Arrays;
 
 import com.beyourshelf.model.dao.BaseDAO;
-import com.beyourshelf.utils.auth.PasswordUtils;
 
 /**
  * DatabaseInitializer is responsible for initializing the database, including
